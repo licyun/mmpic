@@ -65,8 +65,13 @@ CREATE TABLE `images_type`  (
 -- ----------------------------
 -- Records of images_type
 -- ----------------------------
-INSERT INTO `images_type` VALUES (1, '性感美女');
-INSERT INTO `images_type` VALUES (2, '靓丽腿模');
-INSERT INTO `images_type` VALUES (3, '清纯美女');
+INSERT INTO `images_type` VALUES (1, '性感');
+INSERT INTO `images_type` VALUES (2, '美腿');
+INSERT INTO `images_type` VALUES (3, '清纯');
+INSERT INTO `images_type` VALUES (4, '欧美');
+INSERT INTO `images_type` VALUES (5, '自拍');
+INSERT INTO `images_type` VALUES (6, '车模');
+INSERT INTO `images_type` VALUES (7, '街拍');
+INSERT INTO `images_type` VALUES (8, '明星');
 
 SET FOREIGN_KEY_CHECKS = 1;
