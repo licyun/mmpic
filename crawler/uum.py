@@ -1,16 +1,17 @@
-﻿# coding='UTF-8'
+# coding='utf-8'
 
 from bs4 import BeautifulSoup
 import threading, pymysql, time, requests, os, urllib3
 
-requests.packages.urllib3.disable_warnings()
+# requests.packages.urllib3.disable_warnings()
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class Spider():
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/65.0.3325.181 Safari/537.36',
-        'Referer': "https://www.mzitu.com"
+        'Referer': "https://www.uumtu.com"
     }
     page_url_list = []
     img_url_list = []
@@ -19,13 +20,14 @@ class Spider():
     s.keep_alive = False
     dbhost = {
         "host": "127.0.0.1",
-        "dbname": "shejutu",
-        "user": "shejutu",
-        "password": "DryEK5WHX8zzafYE"
+        "dbname": "mmpic",
+        "user": "mmpic",
+        "password": "mmpic"
     }
 
+
     def __init__(self, page_num=10, img_path='imgdir', thread_num=5, type="xinggan", type_id=1):
-        self.spider_url = 'https://www.mzitu.com'
+        self.spider_url = 'https://www.uumtu.com'
         self.page_number = int(page_num)
         self.img_path = img_path
         self.thread_num = thread_num
@@ -35,18 +37,19 @@ class Spider():
     def get_url(self):
         for i in range(1, self.page_number + 1):
             if i ==1:
-                page_tem_url = self.spider_url +"/"+self.type
+                indexurl = self.spider_url +"/"+self.type + "/"
+                page = self.s.get(indexurl, timeout = 30).text
             else:
-                page_tem_url = self.spider_url +"/"+self.type+"/page/"+str(i)
-            print("采集第",i,"页",page_tem_url)
-            page = self.s.get(page_tem_url , headers = self.headers)
-            page = page.text
+                listurl = self.spider_url +"/"+self.type  +"/list_" + str(i) + ".html"
+                print("采集第" , i , "页网址", listurl)
+                page=self.s.get(listurl, timeout = 30).text
             soup = BeautifulSoup(page, "html.parser")
-            page_base_url = soup.find("div",class_="postlist").find_all("li")
+            page_base_url = soup.find("div",class_="listmain").find_all("div", class_="listmainrows")
             for page_url in page_base_url:
                 url = page_url.find("a").get("href")
-                print(url)
-                self.page_url_list.append(url)
+                fullurl = self.spider_url + url
+                print(fullurl)
+                self.page_url_list.append(fullurl)
             i = i + 1
 
     def get_img_url(self):
@@ -55,27 +58,28 @@ class Spider():
         cursor = db.cursor()
         for img_base_url in self.page_url_list:
             tagidlist = []
-            print("采集网址：",img_base_url)
-            req = self.s.get(img_base_url, headers = self.headers)
-            html = req.content 
+            print(img_base_url)
+            req = self.s.get(img_base_url,verify=False)
+            html = req.text
+            BeautifulSoup(html, "html.parser")
             img_soup = BeautifulSoup(html, "html.parser")
-            #图片数量
-            img_num = img_soup.find("div", class_="pagenavi").text.split("…")[-1][0:-5]
+            img_num = img_soup.find("h1").text.split("/")[-1][0:-1]
             print("img_num", img_num)
-            #图片链接
-            img_src = img_soup.find("div", class_="main-image").find("img").get("src")
-            img_url = img_src.split("/")[0:-1]
+            img_url = img_soup.find("p", class_="cinfo").find_next("img").get("src")
+            #find_next("a").find("img").get("src")
             #print("img_url", img_url)
             img_surl = "/".join(img_url)
-            # print("img_surl", img_surl)
-            title = img_soup.find("h2", class_="main-title").text
+            #print("img_surl", img_surl)
+            title = img_soup.find("h1").text.split("(")[0]
             # print("title", title)
+
             isExists = cursor.execute("SELECT * FROM images_page WHERE title =" + "'" + title + "'" + " limit 1;")
-            tag_list = img_soup.find("div", class_="main-tags").find_all("a")
+            tag_list = img_soup.find("p", class_="fontstyle2").find_all("a")
+            if tag_list is None:
+                tag_list = ['美女']
             if isExists == 1:
                 print("已采集：" + title)
             else:
-                # tag为空时，添加tag为160
                 if tag_list:
                     for tags in tag_list:
                         tag=tags.text
@@ -96,24 +100,21 @@ class Spider():
                 img_id=0
                 #目标页面图片ID
                 page_id=img_base_url.split("/")[-1].split(".")[0]
-                #图片末尾id前缀
-                page_before_id = img_src.split("/")[-1][0:3]
-                #时间文件夹
                 image_time_path = time.strftime('%Y%m%d', time.localtime(time.time()))
                 for i in range(1, int(img_num)):
                     print("sleep 3 s")
                     time.sleep(3)
-                    #图片名称
-                    img_name = page_before_id + str("%02d" % i) + ".jpg"
-                    #图片下载地址
-                    img_url = img_surl + "/" + img_name
                     if i==1:
+                        req = self.s.get(img_base_url)
+                        html = req.content
+                        img_soup = BeautifulSoup(html, "html.parser")
+                        img_url = img_soup.find("p", class_="cinfo").find_next("img").get("src")
+                        img_name=img_url.split("/")[-1]
                         print("开始采集：" + title)
                         p = (title, str(tagidlist), image_time_path, self.type_id, "1")
                         cursor.execute("INSERT INTO images_page (title,tagid,sendtime,typeid,firstimg) VALUES (%s,%s,%s,%s,%s)",
                                        p)
                         img_id = str(cursor.lastrowid)
-                        #图片保存在本地的路径
                         img_loc_path = self.img_path + image_time_path + "/" + img_id + "/" + img_name
                         #图片下载失败后删除该条数据
                         if self.down_img(img_url, img_id, image_time_path) == False:
@@ -123,18 +124,24 @@ class Spider():
                             cursor.execute(
                                 "UPDATE images_page SET firstimg = " + "'" + img_loc_path + "'" + " WHERE id=" + "'" + img_id + "'")
                     else:
-                        #图片保存在本地的路径
+                        img_page = self.spider_url+"/"+self.type+"/"+page_id+"_"+str(i)+".html"
+                        #print("img_page:", img_page)
+                        req = self.s.get(img_page)
+                        html = req.content
+                        img_soup = BeautifulSoup(html, "html.parser")
+                        img_url = img_soup.find("p", class_="cinfo").find_next("img").get("src")
+                        img_name = img_url.split("/")[-1]
                         img_loc_path = self.img_path + image_time_path + "/" + img_id + "/" + img_name
-                        #单条图片数据
                         imgp = img_id, img_loc_path
                         if self.down_img(img_url, img_id, image_time_path) == True:
                             cursor.execute("INSERT INTO images_image (pageid,imageurl) VALUES (%s,%s)", imgp)
                         #self.img_url_list.append(img_url_pageid)
+
         db.close()
 
-    def down_img(self, imgsrc, img_id, time_path):
+    def down_img(self, imgsrc, img_id, image_time_path):
         flag = False
-        path = self.img_path + time_path + "/"
+        path = self.img_path + image_time_path + "/"
         isdata = os.path.exists("../" + path + img_id)
         img_name = imgsrc.split("/")[-1].split(".")[0] + ".jpg"
         img_src = path + img_id + "/" + img_name
@@ -169,9 +176,16 @@ class Spider():
         cursor.execute("DELETE FROM `images_page` WHERE firstimg = '1'")
         db.close()
 
+
 if __name__ == '__main__':
-    for i in [{"page": 10, "type": "xinggan", "type_id": 1}, {"page": 1, "type": "mm", "type_id": 3}]:
-        spider = Spider(page_num=i.get("page"), img_path='/static/images/mzitu/', thread_num=1, type_id=i.get("type_id"),
+    # for i in [{"page": 1, "type": "xinggan", "type_id": 1}]:
+    # for i in [{"page": 1, "type": "siwa", "type_id": 2}]:
+    # for i in [{"page": 1, "type": "xinggan", "type_id": 1},
+    for i in [{"page": 1, "type": "siwa", "type_id": 2},
+    {"page": 5, "type": "qingchun", "type_id": 3},
+    {"page": 5, "type": "zipai", "type_id": 5},
+    {"page": 5, "type": "chemo", "type_id": 6}]:
+        spider = Spider(page_num=i.get("page"), img_path='/static/images/uumtu/', thread_num=1, type_id=i.get("type_id"),
                         type=i.get("type"))
         print("开始采集链接")
         spider.get_url()
