@@ -64,16 +64,21 @@ DATABASES = {
 }
 
 2、将模板目录下的pagination.html文件放入python安装目录的/site-packages/dj_pagination/templates/pagination/下
-（centos7 /usr/lib/python3.6/site-packages/dj_pagination/templates/pagination）
+（centos7 cp pagination.html /usr/lib/python3.6/site-packages/dj_pagination/templates/pagination/)
 
 3.导入数据库文件
 导入数据库文件mmpic.sql到mysql数据库
 
 4.运行程序
 uwsgi --ini uwsgi.ini
+
+5.访问网站
+浏览器访问 ip:8000 可以正常访问即搭建成功
+访问前请确保服务器防火墙已开启8000端口
 ```
 
 ## 爬虫文件说明
+
 1. 爬虫位于crawler目录下，每一个文件都是独立的，可单独执行。
 1. 爬虫主要修改对应的数据库名、数据库用户名及密码。
 1. 例： python3 mzt.py
