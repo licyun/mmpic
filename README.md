@@ -82,3 +82,10 @@ uwsgi --ini uwsgi.ini
 1. 爬虫位于crawler目录下，每一个文件都是独立的，可单独执行。
 1. 爬虫主要修改对应的数据库名、数据库用户名及密码。
 1. 例： python3 mzt.py
+
+## 修改模板文件
+
+1. 修改settings.py文件中的 'mmpic' 为 templates目录下模板文件名
+'DIRS': [os.path.join(BASE_DIR, 'templates'+"/"+"mmpic")]
+2、将模板目录下的pagination.html文件放入python安装目录的/site-packages/dj_pagination/templates/pagination/下
+（centos7 cp pagination.html /usr/lib/python3.6/site-packages/dj_pagination/templates/pagination/)
