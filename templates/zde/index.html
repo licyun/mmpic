@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta http-equiv="cache-control" content="no-siteapp">
+<title>mmpic -妹子图片分享</title>
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel='stylesheet' id='main-css' href="/static/zde/css/style.css" type='text/css' media='all' />
+<script type='text/javascript' src="/static/zde/js/jquery.js"></script>
+<meta name="keywords" content="妹子,美女,VIP,SVIP,性感,免费,图片,美女图,胸器">
+<meta name="description" content="mmpic分享高品质美女图片，快速无弹窗。可以长期收藏的美女图片站">
+<style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+<link rel="icon" href="/static/favicon.ico" />
+<!--[if lt IE 9]><script src="/static/zde/js/html5.js"></script><![endif]-->
+</head>
+<body class="home blog list-thumb-hover-action">
+<header class="header">
+	<div class="container">
+		<h1 class="logo"><a href="/" title="首页"><img src="/static/logo.png"><span>mmpic</span></a></h1>
+		<div class="sitenav">
+			<ul>
+				{% for types in typelist %}
+                    <li><a href="{% url 'type' types.type_id %}">{{ types.type }}</a></li>
+                {% endfor %}
+			</ul>
+		</div>
+		<span class="sitenav-on"><i class="fa"></i></span>
+		<span class="sitenav-mask"></span>
+							<span class="searchstart-on"><i class="fa">&#xe600;</i></span>
+			<span class="searchstart-off"><i class="fa">&#xe606;</i></span>
+			<form method="get" class="searchform" action="/search/">
+				<button tabindex="3" class="sbtn" type="submit"><i class="fa">&#xe600;</i></button><input tabindex="2" class="sinput" name="s" type="text" placeholder="输入关键字" value="">
+			</form>
+			</div>
+</header>
+<section class="container">
+	<div class="excerpts-wrapper">
+		<div class="excerpts">
+		{% load pagination_tags %}
+		{% autopaginate data 10 %}
+            {% for imglist in data %}
+			<article class="excerpt excerpt-c5">
+				<a class="thumbnail" href="{% url 'article' imglist.pid %}">
+				<div class="imgbox" style="background-image:url({{ imglist.firstimg }});"></div>
+				<h2><a href="{% url 'article' imglist.pid %}" >{{ imglist.title }}</a></h2>
+				<footer>
+				<a class="post-like">
+				<time>{{ imglist.sendtime |date:'Y-m-d' }}</time>
+				</footer>
+			</article>
+		 {% endfor %}
+		</div>
+	</div>	
+	<div class="pagination pagination-multi"> {% paginate %} </div>
+</section>
+<footer class="footer">
+	    &copy; 2019 <a href="/">mmpic</a><br />
+		<h1>美图分享,每日更新.</h1>
+		POWERED BY <a href="django.org">DJANGO</a> | THEME BY <a href="https://www.mmpic.com">mmpic</a>
+</footer>
+
+ 
+
+<script>
+		window.TBUI = {
+		ajaxpager       : '10',
+		pagenum         : '10',
+		shareimage      : '',
+		shareimagethumb : '1',
+		fullgallery     : '0',
+		fullimage       : '0'
+	}
+</script>
+<script type='text/javascript' src="/static/zde/js/jquery.lazyload.min.js"></script>
+<script type='text/javascript' src="/static/zde/js/main.js"></script>
+<script>
+<!-- 此处添加统计代码或广告代码 -->
+</script>
+</body>
+</html>

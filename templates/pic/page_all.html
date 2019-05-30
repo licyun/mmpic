@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <!--favicon icon-->
+    <link rel="icon" type="image/png" href="/static/favicon.ico">
+    <title>{{ title }}-mmpic</title>
+    <!--common style-->
+    <link href='//fonts.cat.net/css?family=Abel|Source+Sans+Pro:400,300,300italic,400italic,600,600italic,700,700italic,900,900italic,200italic,200' rel='stylesheet' type='text/css'>
+	<meta name="keywords" content="{% for t in tag %}{{ t.tname }},{% endfor %}"/>
+    <meta name="description" content="{{ title }}"/>
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/static/pic/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/pic/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/pic/css/shortcodes.css">
+    <link rel="stylesheet" href="/static/pic/css/style.css">
+    <link rel="stylesheet" href="/static/pic/css/default-theme.css">
+    <!-- end inject -->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="/static/pic/js/html5.min.js"></script>
+    <script src="/static/pic/js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <!--  preloader start -->
+    <div id="tb-preloader">
+        <div class="tb-preloader-wave"></div>
+    </div>
+    <!-- preloader end -->
+
+
+    <div class="wrapper">
+
+    <header class="l-header">
+
+        <div class="l-navbar l-navbar_t-light l-navbar_expand js-navbar-sticky">
+            <div class="container-fluid">
+                <nav class="menuzord js-primary-navigation" role="navigation" aria-label="Primary Navigation">
+
+                    <!--logo start-->
+                    <a href="/" class="logo-brand">
+                        mmpic
+                    </a>
+                    <!--logo end-->
+
+                    <!--mega menu start-->
+                    <ul class="menuzord-menu menuzord-right c-nav_s-standard">
+                        <li><a href="/"><span class="fa fa-home"> 首页</span></a></li>
+
+
+                        <li><a href="javascript:void(0)"><span class="fa fa-th"> 分类</span></a>
+                            <ul class="dropdown">
+                                {% for types in typelist %}
+                                <li><a href="{% url 'type' types.type_id %}">{{ types.type }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <a href="javascript:void(0)"><i class="fa fa-search"></i> 搜索</a>
+                            <div class="megamenu megamenu-quarter-width navbar-search">
+                                <form id="search" method="GET" action="/search/" role="searchform">
+                                    <input type="text" name="s" class="form-control" placeholder="在这里输入">
+                                </form>
+                            </div>
+                        </li>
+
+                    </ul>
+                    <!--mega menu end-->
+
+                </nav>
+            </div>
+        </div>
+
+    </header>        <!--header end-->
+
+		<!-- single -->
+
+        <!--body content start-->
+        <section class="body-content ">
+            <div class="page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!--classic image post-->
+                            <div class="blog-classic">
+                            <div class="blog-post">
+                                    <div class="full-width" style="display:none;">
+
+                                    </div>
+                                    <h4 class="text-uppercase"><a itemtype="url" href="#">{{ title }}</a></h4>
+                                    <ul class="post-meta">
+                                        <li><i class="fa fa-user"></i><a href="{% url 'type' typeid %}">{{ type }}</a></li>
+                                        <li><i class="fa fa-folder-open"></i><a href="{% url 'article' pageid %}">分页查看</a></li>
+                                    </ul>
+                                    <div class="inline-block">
+                                            <div class="widget-tags">
+                                                {% for t in tag %}
+                                                    <a href="{% url 'tag' t.tid %}">{{ t.tname }}</a>
+                                                {% endfor %}
+                                            </div>
+                                    </div>
+                                    <br>
+                                    {% for img in data %}
+                                        <a href="?page{{ page_suffix }}={{ page_obj.next_page_number }}{{ getvars }}" > <img src="{{ img }}" alt="{{ title }}" title="{{ title }}"></a><br>
+                                    {% endfor %}
+
+                                </p>
+                  
+
+
+                                    <div class="clearfix inline-block">
+                                                                            </div>
+
+									                                    <!--comments  section end-->
+                            </div>
+                            <!--classic image post-->
+
+                        </div>
+
+
+
+                    </div>
+					</div>
+			<div class="container">
+            <div class="row ">
+                <div class="portfolio portfolio-with-title portfolio-masonry blog-m col-4 gutter ">
+                    {% for items in similar %}
+                    <div class="portfolio-item ">
+                        <a href="{% url 'article' items.pid %}">
+						<div class="thumb">
+                            <img src="{{ items.firstimg }}" alt="{{items.title }}">
+                            <div class="portfolio-hover">
+                                <div class="action-btn">
+                                        <!--<i class="fa fa-send"></i> -->
+                                        {{ items.stitle }}
+									
+                                </div>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+
+        </section>
+        <!--body content end-->
+
+
+
+
+        <footer id="footer" class="gray text-center footer-1">
+            <div class="container">
+                <p class="footer-logo">
+                    <img class="retina" src="/static/pic/logo.png" alt="" />
+                </p>
+                <div class="sub-title">美图分享,每日更新.</div>
+                <div class="copyright">
+                    &copy; 2018  <a href="/" >mmpic</a>.
+                </div>
+                <div class="copyright-sub-title text-uppercase">
+                    <span>Powered by <a href="http://djngo.org/" rel="nofollow" target="_blank">Django</a> | Theme by <a href="https://p.liangxingjian.com/" target="_blank">Pic</a> </span>
+                </div>
+            </div>
+        </footer>
+
+
+
+
+
+    </div>
+
+
+	<!-- inject:js -->
+	<script src="/static/pic/js/jquery.min.js"></script>
+	<script src="/static/pic/js/bootstrap.min.js"></script>
+	<script src="/static/pic/js/validator.min.js"></script>
+	<script src="/static/pic/js/jquery.countTo.min.js"></script>
+	<script src="/static/pic/js/jquery.magnific-popup.min.js"></script>
+	<script src="/static/pic/js/jquery.flexslider-min.js"></script>
+	<script src="/static/pic/js/isotope.pkgd.min.js"></script>
+	<script src="/static/pic/js/jquery.sticky.min.js"></script>
+    <script src="/static/pic/js/imagesloaded.js"></script>
+    <script src="/static/pic/js/menuzord.js"></script>
+    <script src="/static/pic/js/smooth.js"></script>
+    <script src="/static/pic/js/scripts.js"></script>
+	<!-- endinject -->
+</body>
+
+</html>
