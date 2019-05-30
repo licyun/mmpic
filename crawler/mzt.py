@@ -25,7 +25,7 @@ class Spider():
     }
 
     def __init__(self, page_num=10, img_path='imgdir', thread_num=5, type="xinggan", type_id=1):
-        self.spider_url = 'https://www.mzitu.com/'
+        self.spider_url = 'https://www.mzitu.com'
         self.page_number = int(page_num)
         self.img_path = img_path
         self.thread_num = thread_num
@@ -35,8 +35,12 @@ class Spider():
     def get_url(self):
         for i in range(1, self.page_number + 1):
             if i ==1:
-                page = self.s.get(self.spider_url +"/"+self.type ,verify=False).text
-            page=self.s.get(self.spider_url +"/"+self.type+"/page/"+str(i),verify=False).text
+                page_tem_url = self.spider_url +"/"+self.type
+            else:
+                page_tem_url = self.spider_url +"/"+self.type+"/page/"+str(i)
+            print("采集第",i,"页",page_tem_url)
+            page = self.s.get(page_tem_url , headers = self.headers)
+            page = page.text
             soup = BeautifulSoup(page, "html.parser")
             page_base_url = soup.find("div",class_="postlist").find_all("li")
             for page_url in page_base_url:
@@ -52,8 +56,8 @@ class Spider():
         for img_base_url in self.page_url_list:
             tagidlist = []
             print("采集网址：",img_base_url)
-            req = self.s.get(img_base_url,verify=False)
-            html = req.content 
+            req = self.s.get(img_base_url, headers = self.headers)
+            html = req.content
             img_soup = BeautifulSoup(html, "html.parser")
             #图片数量
             img_num = img_soup.find("div", class_="pagenavi").text.split("…")[-1][0:-5]
@@ -125,7 +129,7 @@ class Spider():
                         imgp = img_id, img_loc_path
                         if self.down_img(img_url, img_id, image_time_path) == True:
                             cursor.execute("INSERT INTO images_image (pageid,imageurl) VALUES (%s,%s)", imgp)
-                        #self.img_url_list.append(img_url_pageid)
+                            #self.img_url_list.append(img_url_pageid)
         db.close()
 
     def down_img(self, imgsrc, img_id, time_path):
