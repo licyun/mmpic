@@ -58,7 +58,7 @@
         </div>
     </div>
 </header>
-<div class="main-content index-page clearfix ">
+<div class="main-content index-page clearfix " id="container">
     <div class="post-lists">
         <div class="post-lists-body">
         {% load pagination_tags %}
@@ -97,13 +97,6 @@
 
 
 <footer id="footer" class="footer ">
-    <div class="footer-social">
-        <div class="footer-container clearfix">
-            <div class="social-list">
-                <a class="social rss" target="blank" href="http://www.mmpic.com/feed/">RSS</a>
-            </div>
-        </div>
-    </div>
     <div class="footer-meta">
         <div class="footer-container">
             <div class="meta-item meta-copyright">
@@ -139,8 +132,8 @@
         </div>
     </div>
 </footer>
-
 <script src="/static/mmpic/js/headroom.min.js"></script>
+<script src="/static/mmpic/js/pd.js"></script>
 <script>
     var header = new Headroom(document.getElementById("header"), {
         tolerance: 0,

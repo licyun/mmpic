@@ -10,10 +10,8 @@ def index(request):
     if request.method == "GET":
         imgs = []
         typelist=[]
-        # page_list = Page.objects.all().order_by("-id")
-        page_list = Page.objects.filter(typeid__in = [1,3,5]) 
+        page_list = Page.objects.all().order_by("-id")
         type_list = Type.objects.all().order_by("id")
-        index_type = "射菊mm"
         for type_arr in type_list:
             type=type_arr.type
             type_id=type_arr.id
@@ -24,7 +22,7 @@ def index(request):
             firstimg =pid.firstimg
             sendtime = pid.sendtime
             imgs.append({"pid": id, "firstimg": firstimg, "title": title,"sendtime":sendtime})
-        return render(request, 'index.html', {"data": imgs,"typelist":typelist,"index_type":index_type})
+        return render(request, 'index.html', {"data": imgs,"typelist":typelist})
 
 
 def page(request, i_id):
@@ -109,7 +107,6 @@ def type(request, typeid):
         imgs = []
         typelist = []
         type_list = Type.objects.all().order_by("id")
-        current_type = Type.objects.get(id=typeid).type
         for type_arr in type_list:
             type = type_arr.type
             type_id = type_arr.id
@@ -121,7 +118,7 @@ def type(request, typeid):
             id=pid.id
             sendtime = pid.sendtime
             imgs.append({"pid": id, "firstimg": firstimg, "title": title, "sendtime": sendtime})
-        return render(request, 'index.html', {"data": imgs,"typelist":typelist,"current_type":current_type})
+        return render(request, 'index.html', {"data": imgs,"typelist":typelist})
 
 
 def similar(type_id,id):

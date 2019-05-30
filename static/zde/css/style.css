@@ -1728,6 +1728,11 @@ body {
 	margin-top: 24px
 }
 
+.excerpts-article {
+	overflow: hidden;
+	margin: 24px
+}
+
 .excerpts {
 	margin-bottom: 15px;
 	margin-right: -2%;
@@ -4240,4 +4245,25 @@ body {
 	transition: transform .5s ease,filter .5s ease;
 	background-position: 50% 50%;
 	background-size: cover
+}
+
+.line_03{
+    width:100%;
+    padding:5px;
+    text-align:center;
+}
+.line_03 b{
+    background: #ddd;
+    margin-top: 4px;
+    display: inline-block;
+    width: 35%;
+    height: 1px;
+    _overflow: hidden;
+    vertical-align: middle;
+}
+.line_03 span{
+    display: inline-block;
+    width:100px;
+    vertical-align: middle;
+    font-size:large;
 }

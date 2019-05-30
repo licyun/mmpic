@@ -1,7 +1,7 @@
 # mmpic
 python爬取美女图片站，djongo框架构建web站点展示图片
 
-94imm修改版
+mmpic修改版
 
 ## 演示站
 [pic.licyun.com](https://pic.licyun.com)

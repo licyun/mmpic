@@ -23,6 +23,7 @@
 		<h1 class="logo"><a href="/" title="首页"><img src="/static/logo.png"><span>mmpic</span></a></h1>
 		<div class="sitenav">
 			<ul>
+				<li><a href="/">首页</a></li>
 				{% for types in typelist %}
                     <li><a href="{% url 'type' types.type_id %}">{{ types.type }}</a></li>
                 {% endfor %}
@@ -45,7 +46,7 @@
             {% for imglist in data %}
 			<article class="excerpt excerpt-c5">
 				<a class="thumbnail" href="{% url 'article' imglist.pid %}">
-				<div class="imgbox" style="background-image:url({{ imglist.firstimg }});"></div>
+				<div class="imgbox" style="background-image:url({{ imglist.firstimg }});"></div></a>
 				<h2><a href="{% url 'article' imglist.pid %}" >{{ imglist.title }}</a></h2>
 				<footer>
 				<a class="post-like">
@@ -75,10 +76,6 @@
 		fullimage       : '0'
 	}
 </script>
-<script type='text/javascript' src="/static/zde/js/jquery.lazyload.min.js"></script>
 <script type='text/javascript' src="/static/zde/js/main.js"></script>
-<script>
-<!-- 此处添加统计代码或广告代码 -->
-</script>
 </body>
 </html>
