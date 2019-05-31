@@ -4,7 +4,7 @@ python爬取美女图片站，djongo框架构建web站点展示图片
 mmpic修改版
 
 ## 演示站
-[pic.licyun.com](https://pic.licyun.com)
+[mmpic.licyun.com](https://mmpic.licyun.com)
 
 ## 安装教程
 ### 1.环境配置
@@ -87,5 +87,5 @@ uwsgi --ini uwsgi.ini
 
 1. 修改settings.py文件中的 'mmpic' 为 templates目录下模板文件名
 'DIRS': [os.path.join(BASE_DIR, 'templates'+"/"+"mmpic")]
-2、将模板目录下的pagination.html文件放入python安装目录的/site-packages/dj_pagination/templates/pagination/下
+2. 将模板目录下的pagination.html文件放入python安装目录的/site-packages/dj_pagination/templates/pagination/下
 （centos7 cp pagination.html /usr/lib/python3.6/site-packages/dj_pagination/templates/pagination/)
