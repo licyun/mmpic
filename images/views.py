@@ -133,7 +133,7 @@ def similar(type_id,id):
         sendtime=s.sendtime
         if pid != id:
             similarlist.append({"stitle": stitle, "tid": tid, "pid": pid,"firstimg":firstimg,"sendtime":sendtime})
-    return_arr = random.sample(similarlist,12)
+    return_arr = random.sample(similarlist, min(len(similarlist), 12))
     return return_arr
 
 
